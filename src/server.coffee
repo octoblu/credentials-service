@@ -5,15 +5,13 @@ RedisNS            = require '@octoblu/redis-ns'
 bodyParser         = require 'body-parser'
 errorHandler       = require 'errorhandler'
 meshbluHealthcheck = require 'express-meshblu-healthcheck'
-MeshbluConfig      = require 'meshblu-config'
 debug              = require('debug')('credentials-service:server')
 Router             = require './router'
 CredentialService  = require './services/credential-service'
 httpSignature      = require '@octoblu/connect-http-signature'
 
 class Server
-  constructor: ({@disableLogging, @port, @publicKey}, {@meshbluConfig, @client})->
-    @meshbluConfig ?= new MeshbluConfig().toJSON()
+  constructor: ({@disableLogging, @port, @publicKey}, {@client})->
 
   address: =>
     @server.address()
@@ -30,7 +28,7 @@ class Server
 
     credentialService = new CredentialService {@client}
 
-    router = new Router {@meshbluConfig, credentialService}
+    router = new Router {credentialService}
 
     router.route app
 
