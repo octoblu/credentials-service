@@ -22,7 +22,7 @@ class Command
     @panic new Error('Missing required environment variable: REDIS_URI') if _.isEmpty @redisUri
 
     redisClient = redis.createClient process.env.REDIS_URI
-    client = new RedisNS 'credentials-service', redisClient
+    client = new RedisNS 'credentials', redisClient
 
     server = new Server @serverOptions, {client}
     server.run (error) =>
