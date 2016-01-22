@@ -67,3 +67,19 @@ describe 'Get Credentials', ->
           message:
             'something': 'is-awesome'
             'it-must-be': 'peter'
+
+  describe 'when an unauthorized request is made', ->
+    beforeEach (done) ->
+      options =
+        uri: '/flows/flow-uuid/instances/instance-uuid'
+        baseUrl: "http://localhost:#{@serverPort}"
+        httpSignature: @HTTP_SIGNATURE_OPTIONS
+        headers:
+          'X-MESHBLU-UUID': 'some-other-uuid'
+        json: true
+
+      request.post options, (error, @response, @body) =>
+        done error
+
+    it 'should return a 403', ->
+      expect(@response.statusCode).to.equal 403
