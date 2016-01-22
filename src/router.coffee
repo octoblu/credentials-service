@@ -5,6 +5,6 @@ class Router
   route: (app) =>
     credentialController = new CredentialController {@credentialService}
 
-    app.post '/flows/:flowId/instances/:instanceId', credentialController.create
+    app.post '/request', credentialController.create
 
 module.exports = Router

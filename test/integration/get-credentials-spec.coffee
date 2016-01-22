@@ -38,14 +38,14 @@ describe 'Get Credentials', ->
   describe 'when a valid request is made', ->
     beforeEach (done) ->
       options =
-        uri: '/flows/flow-uuid/instances/instance-uuid'
+        uri: '/request'
         baseUrl: "http://localhost:#{@serverPort}"
         httpSignature: @HTTP_SIGNATURE_OPTIONS
         headers:
           'X-MESHBLU-UUID': 'flow-uuid'
         json:
-          'something': 'is-awesome'
-          'it-must-be': 'peter'
+          nodeId: 'node-uuid'
+          flowId: 'flow-uuid'
 
       request.post options, (error, @response, @body) =>
         done error
@@ -63,16 +63,14 @@ describe 'Get Credentials', ->
         expect(JSON.parse requestData).to.deep.equal
           metadata:
             flowId: 'flow-uuid'
-            instanceId: 'instance-uuid'
+            nodeId: 'node-uuid'
             toNodeId: 'engine-input'
-          message:
-            'something': 'is-awesome'
-            'it-must-be': 'peter'
+          message: {}
 
   describe 'when an unauthorized request is made', ->
     beforeEach (done) ->
       options =
-        uri: '/flows/flow-uuid/instances/instance-uuid'
+        uri: '/request'
         baseUrl: "http://localhost:#{@serverPort}"
         httpSignature: @HTTP_SIGNATURE_OPTIONS
         headers:

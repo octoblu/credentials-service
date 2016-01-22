@@ -2,17 +2,16 @@ class CredentialController
   constructor: ({@credentialService}) ->
 
   create: (request, response) =>
-    {flowId, instanceId} = request.params
-
+    {flowId, nodeId} = request.body
     unless request.header('X-MESHBLU-UUID') == flowId
       return response.status(403).end()
 
     message =
       metadata:
         flowId: flowId
-        instanceId: instanceId
+        nodeId: nodeId
         toNodeId: 'engine-input'
-      message: request.body
+      message: {}
 
     @credentialService.create {message, flowId}, (error) =>
       return response.status(error.code || 500).send(error: error.message) if error?
