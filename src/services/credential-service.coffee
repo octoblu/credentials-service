@@ -5,14 +5,12 @@ class CredentialService
 
   create: ({message, flowId}, callback) =>
     messageStr = JSON.stringify message
-    
-    @client.get "request-queue-name:#{flowId}", (error, requestQueueName) =>
-      requestQueueName ?= 'request:queue'
+    requestQueueName = 'request:queue'
 
-      debug '@client.lpush', requestQueueName, messageStr
-      @client.lpush requestQueueName, messageStr, (error) =>
-        return callback @_createError 500, error.message if error?
-        callback()
+    debug '@client.lpush', requestQueueName, messageStr
+    @client.lpush requestQueueName, messageStr, (error) =>
+      return callback @_createError 500, error.message if error?
+      callback()
 
   _createError: (code, message) =>
     error = new Error message
