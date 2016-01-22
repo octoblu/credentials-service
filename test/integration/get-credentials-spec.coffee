@@ -3,6 +3,7 @@ request = require 'request'
 shmock  = require '@octoblu/shmock'
 Server  = require '../../src/server'
 redis   = require 'fakeredis'
+RedisNS = require '@octoblu/redis-ns'
 uuid    = require 'uuid'
 {publicKey, privateKey} = require '../keys.json'
 
@@ -21,9 +22,9 @@ describe 'Get Credentials', ->
 
     @redisKey = uuid.v1()
 
-    client = redis.createClient @redisKey
+    client = new RedisNS 'credentials', redis.createClient @redisKey
 
-    @redisClient = redis.createClient @redisKey
+    @redisClient = new RedisNS 'credentials', redis.createClient @redisKey
 
     @server = new Server serverOptions, {client}
 
@@ -58,7 +59,7 @@ describe 'Get Credentials', ->
 
       it 'should return the request', ->
         [channel, requestData] = @result
-        expect(channel).to.deep.equal 'request:queue'
+        expect(channel).to.deep.equal 'credentials:request:queue'
         expect(JSON.parse requestData).to.deep.equal
           metadata:
             flowId: 'flow-uuid'

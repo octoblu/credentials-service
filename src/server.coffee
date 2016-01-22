@@ -1,7 +1,6 @@
 redis              = require 'redis'
 morgan             = require 'morgan'
 express            = require 'express'
-RedisNS            = require '@octoblu/redis-ns'
 bodyParser         = require 'body-parser'
 errorHandler       = require 'errorhandler'
 meshbluHealthcheck = require 'express-meshblu-healthcheck'

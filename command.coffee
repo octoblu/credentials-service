@@ -1,7 +1,7 @@
 _             = require 'lodash'
 Server        = require './src/server'
 redis         = require 'redis'
-RedisNS       = require 'redis-ns'
+RedisNS       = require '@octoblu/redis-ns'
 publicKey     = require './public-key.json'
 
 class Command
