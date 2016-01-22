@@ -2,9 +2,10 @@ class CredentialController
   constructor: ({@credentialService}) ->
 
   create: (request, response) =>
-    {flowId, nodeId} = request.body
-    unless request.header('X-MESHBLU-UUID') == flowId
-      return response.status(403).end()
+    {nodeId} = request.body
+    flowId = request.header('X-MESHBLU-UUID')
+    return response.sendStatus(403) unless flowId?
+    return response.sendStatus(422) unless nodeId?
 
     message =
       metadata:

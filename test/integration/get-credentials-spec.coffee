@@ -45,7 +45,6 @@ describe 'Get Credentials', ->
           'X-MESHBLU-UUID': 'flow-uuid'
         json:
           nodeId: 'node-uuid'
-          flowId: 'flow-uuid'
 
       request.post options, (error, @response, @body) =>
         done error
@@ -80,5 +79,5 @@ describe 'Get Credentials', ->
       request.post options, (error, @response, @body) =>
         done error
 
-    it 'should return a 403', ->
-      expect(@response.statusCode).to.equal 403
+    it 'should return a 422', ->
+      expect(@response.statusCode).to.equal 422
