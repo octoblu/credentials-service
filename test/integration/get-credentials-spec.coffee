@@ -42,9 +42,11 @@ describe 'Get Credentials', ->
         baseUrl: "http://localhost:#{@serverPort}"
         httpSignature: @HTTP_SIGNATURE_OPTIONS
         headers:
-          'X-MESHBLU-UUID': 'flow-uuid'
+          'X-MESHBLU-UUID': 'credentials-service-uuid'
         json:
-          nodeId: 'node-uuid'
+          fromUuid: 'flow-uuid'
+          payload:
+            nodeId: 'node-uuid'
 
       request.post options, (error, @response, @body) =>
         done error

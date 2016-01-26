@@ -1,12 +1,15 @@
+_ = require 'lodash'
 class CredentialController
   constructor: ({@credentialService}) ->
 
   create: (request, response) =>
-    {nodeId} = request.body
-    flowId = request.header('X-MESHBLU-UUID')
+    incomingMessage = request.body
+    return response.sendStatus(422) unless incomingMessage?.payload?.nodeId?
+    flowId = incomingMessage.fromUuid
     return response.sendStatus(403) unless flowId?
-    return response.sendStatus(422) unless nodeId?
 
+    {nodeId} = incomingMessage.payload
+    
     message =
       metadata:
         flowId: flowId
