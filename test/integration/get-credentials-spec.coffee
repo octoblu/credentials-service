@@ -16,7 +16,7 @@ describe 'Get Credentials', ->
         publicKey: publicKey
 
     @HTTP_SIGNATURE_OPTIONS =
-      keyId: 'credentials-service-key'
+      keyId: 'credentials-service-uuid'
       key: privateKey
       headers: [ 'date', 'X-MESHBLU-UUID' ]
 
@@ -26,7 +26,7 @@ describe 'Get Credentials', ->
 
     @redisClient = new RedisNS 'credentials', redis.createClient @redisKey
 
-    @server = new Server serverOptions, {client}
+    @server = new Server serverOptions, {client,credentialsUuid:'credentials-service-uuid'}
 
     @server.run =>
       @serverPort = @server.address().port

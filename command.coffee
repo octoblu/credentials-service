@@ -13,6 +13,7 @@ class Command
 
     @redisUri = process.env.REDIS_URI
     @redisNamespace = process.env.REDIS_NAMESPACE ? 'credentials'
+    @credentialsUuid = process.env.CREDENTIALS_UUID
 
   panic: (error) =>
     console.error error.stack
@@ -21,11 +22,12 @@ class Command
   run: =>
     # Use this to require env
     @panic new Error('Missing required environment variable: REDIS_URI') if _.isEmpty @redisUri
+    @panic new Error('Missing required environment variable: CREDENTIALS_UUID') if _.isEmpty @credentialsUuid
 
     redisClient = redis.createClient process.env.REDIS_URI
     client = new RedisNS @redisNamespace, redisClient
 
-    server = new Server @serverOptions, {client}
+    server = new Server @serverOptions, {client,@credentialsUuid}
     server.run (error) =>
       return @panic error if error?
       {address,port} = server.address()
