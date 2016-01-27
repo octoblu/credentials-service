@@ -10,7 +10,7 @@ CredentialService  = require './services/credential-service'
 httpSignature      = require '@octoblu/connect-http-signature'
 
 class Server
-  constructor: ({@disableLogging, @port, @publicKey}, {@client,@credentialsUuid})->
+  constructor: ({@disableLogging, @port, @publicKey}, {@jobManager,@credentialsUuid})->
 
   address: =>
     @server.address()
@@ -25,7 +25,7 @@ class Server
     app.use bodyParser.urlencoded limit: '5mb', extended : true
     app.use bodyParser.json limit : '5mb'
 
-    credentialService = new CredentialService {@client, @credentialsUuid}
+    credentialService = new CredentialService {@jobManager, @credentialsUuid}
 
     router = new Router {credentialService}
 

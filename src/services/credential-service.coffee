@@ -1,14 +1,11 @@
 debug = require('debug')('credentials-service:service')
 
 class CredentialService
-  constructor: ({@client}) ->
+  constructor: ({@jobManager}) ->
 
   create: ({message, flowId}, callback) =>
-    messageStr = JSON.stringify message
-    requestQueueName = 'request:queue'
-
-    debug '@client.lpush', requestQueueName, messageStr
-    @client.lpush requestQueueName, messageStr, (error) =>
+    debug 'pushing into request queue', message
+    @jobManager.createRequest 'request', message, (error) =>
       return callback @_createError 500, error.message if error?
       callback()
 

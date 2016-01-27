@@ -1,10 +1,11 @@
-http    = require 'http'
-request = require 'request'
-shmock  = require '@octoblu/shmock'
-Server  = require '../../src/server'
-redis   = require 'fakeredis'
-RedisNS = require '@octoblu/redis-ns'
-uuid    = require 'uuid'
+http       = require 'http'
+request    = require 'request'
+shmock     = require '@octoblu/shmock'
+Server     = require '../../src/server'
+JobManager = require 'meshblu-core-job-manager'
+redis      = require 'fakeredis'
+RedisNS    = require '@octoblu/redis-ns'
+uuid       = require 'uuid'
 {publicKey, privateKey} = require '../keys.json'
 
 describe 'Get Credentials', ->
@@ -23,10 +24,12 @@ describe 'Get Credentials', ->
     @redisKey = uuid.v1()
 
     client = new RedisNS 'credentials', redis.createClient @redisKey
+    jobManager = new JobManager client: client, timeoutSeconds: 1
 
-    @redisClient = new RedisNS 'credentials', redis.createClient @redisKey
+    testClient = new RedisNS 'credentials', redis.createClient @redisKey
+    @testJobManager = new JobManager client: testClient, timeoutSeconds: 1
 
-    @server = new Server serverOptions, {client,credentialsUuid:'credentials-service-uuid'}
+    @server = new Server serverOptions, {jobManager,credentialsUuid:'credentials-service-uuid'}
 
     @server.run =>
       @serverPort = @server.address().port
@@ -56,17 +59,13 @@ describe 'Get Credentials', ->
 
     describe 'it should store the request into a queue', ->
       beforeEach (done) ->
-        @redisClient.brpop 'request:queue', 1, (error, @result) => done error
+        @testJobManager.getRequest ['request'], (error, @result) => done error
 
       it 'should return the request', ->
-        [channel, requestData] = @result
-        expect(channel).to.deep.equal 'credentials:request:queue'
-        expect(JSON.parse requestData).to.deep.equal
-          metadata:
-            flowId: 'flow-uuid'
-            nodeId: 'node-uuid'
-            toNodeId: 'engine-input'
-          message: {}
+        expect(@result.metadata).to.deep.equal
+          flowId: 'flow-uuid'
+          nodeId: 'node-uuid'
+          toNodeId: 'engine-input'
 
   describe 'when an unauthorized request is made', ->
     beforeEach (done) ->

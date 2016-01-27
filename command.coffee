@@ -1,6 +1,7 @@
 _             = require 'lodash'
 Server        = require './src/server'
 redis         = require 'redis'
+JobManager    = require 'meshblu-core-job-manager'
 RedisNS       = require '@octoblu/redis-ns'
 publicKey     = require './public-key.json'
 
@@ -27,7 +28,9 @@ class Command
     redisClient = redis.createClient process.env.REDIS_URI
     client = new RedisNS @redisNamespace, redisClient
 
-    server = new Server @serverOptions, {client,@credentialsUuid}
+    jobManager = new JobManager client: client, timeoutSeconds: 45
+
+    server = new Server @serverOptions, {jobManager,@credentialsUuid}
     server.run (error) =>
       return @panic error if error?
       {address,port} = server.address()

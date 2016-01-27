@@ -16,7 +16,7 @@ class CredentialController
         flowId: flowId
         nodeId: nodeId
         toNodeId: 'engine-input'
-      message: {}
+      rawData: '{}'
 
     @credentialService.create {message, flowId}, (error) =>
       return response.status(error.code || 500).send(error: error.message) if error?
