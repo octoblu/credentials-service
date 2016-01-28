@@ -6,17 +6,19 @@ class CredentialController
     return response.sendStatus(403) if request.header('X-MESHBLU-UUID') == @credentialsUuid
     incomingMessage = request.body
     return response.sendStatus(422) unless incomingMessage?.payload?.nodeId?
+    return response.sendStatus(422) unless incomingMessage?.payload?.messageId?
     flowId = incomingMessage.fromUuid
     return response.sendStatus(403) unless flowId?
 
-    {nodeId} = incomingMessage.payload
+    {nodeId, messageId} = incomingMessage.payload
 
     message =
       metadata:
         flowId: flowId
         nodeId: nodeId
         toNodeId: 'engine-input'
-      rawData: '{}'
+        messageId: messageId
+      data: {}
 
     @credentialService.create {message, flowId}, (error) =>
       return response.status(error.code || 500).send(error: error.message) if error?

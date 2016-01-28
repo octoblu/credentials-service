@@ -50,6 +50,7 @@ describe 'Get Credentials', ->
           fromUuid: 'flow-uuid'
           payload:
             nodeId: 'node-uuid'
+            messageId: 'message-uuid'
 
       request.post options, (error, @response, @body) =>
         done error
@@ -66,6 +67,7 @@ describe 'Get Credentials', ->
           flowId: 'flow-uuid'
           nodeId: 'node-uuid'
           toNodeId: 'engine-input'
+          messageId: 'message-uuid'
 
   describe 'when an unauthorized request is made', ->
     beforeEach (done) ->
