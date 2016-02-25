@@ -1,8 +1,13 @@
-FROM node:5-onbuild
-MAINTAINER Octoblu <docker@octoblu.com>
+FROM node:5
+MAINTAINER Octoblu, Inc. <docker@octoblu.com>
 
 EXPOSE 80
 
-ADD https://meshblu.octoblu.com/publickey /usr/src/app/public-key.json
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app/
+RUN npm -s install --production
+COPY . /usr/src/app/
 
 CMD [ "node", "command.js" ]

@@ -17,9 +17,9 @@ class Server
 
   run: (callback) =>
     app = express()
+    app.use meshbluHealthcheck()
     app.use morgan 'dev', immediate: false unless @disableLogging
     app.use errorHandler()
-    app.use meshbluHealthcheck()
     app.use httpSignature.verify pub: @publicKey.publicKey
     app.use httpSignature.gateway()
     app.use bodyParser.urlencoded limit: '5mb', extended : true
