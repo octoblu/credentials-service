@@ -28,3 +28,6 @@ node_modules
 
 meshblu.json
 public-key.json
+
+# dev files
+.*-dev
