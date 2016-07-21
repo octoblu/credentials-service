@@ -63,7 +63,7 @@ describe 'Get Credentials', ->
         @testJobManager.getRequest ['request'], (error, @result) => done error
 
       it 'should return the request', ->
-        expect(@result.metadata).to.deep.equal
+        expect(@result.metadata).to.containSubset
           flowId: 'flow-uuid'
           nodeId: 'node-uuid'
           toNodeId: 'engine-input'
