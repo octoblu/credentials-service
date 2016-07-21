@@ -5,6 +5,7 @@ class CredentialService
 
   create: ({message, flowId}, callback) =>
     debug 'pushing into request queue', message
+    message?.ignoreResponse = true
     @jobManager.createRequest 'request', message, (error) =>
       return callback @_createError 500, error.message if error?
       callback()
