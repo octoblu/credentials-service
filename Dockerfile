@@ -7,8 +7,6 @@ ENV NPM_CONFIG_LOGLEVEL error
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-ADD https://meshblu.octoblu.com/publickey /usr/src/app/public-key.json
-
 COPY package.json /usr/src/app/
 RUN npm -s install --production
 COPY . /usr/src/app/
