@@ -1,6 +1,6 @@
 {
   "name": "credentials-service",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Put some description here",
   "keywords": [],
   "homepage": "https://github.com/octoblu/credential",
@@ -15,7 +15,7 @@
     "url": "https://github.com/octoblu/credential.git"
   },
   "scripts": {
-    "start": "fetch-meshblu-public-key && node command.js",
+    "start": "node command.js",
     "test": "mocha"
   },
   "devDependencies": {
@@ -43,7 +43,7 @@
     "express-meshblu-healthcheck": "^1.0.1",
     "express-package-version": "0.0.2",
     "express-send-error": "^1.1.0",
-    "fetch-meshblu-public-key": "^1.0.1",
+    "fetch-meshblu-public-key": "^1.1.0",
     "lodash": "^3.10.1",
     "meshblu-core-job-manager": "^3.10.1",
     "morgan": "^1.6.1",
