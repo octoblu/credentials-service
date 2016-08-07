@@ -41,16 +41,20 @@ class Command
 
       jobManager = new JobManager client: client, timeoutSeconds: 45
 
-      server = new Server @serverOptions, {jobManager,@credentialsUuid}
-      server.run (error) =>
+      @server = new Server @serverOptions, {jobManager,@credentialsUuid}
+      @server.run (error) =>
         return @panic error if error?
-        {address,port} = server.address()
-        console.log "Server listening on #{address}:#{port}"
+        {address,port} = @server.address()
+        console.log "Credentials Service listening on port:#{port}"
 
     process.on 'SIGTERM', =>
       console.log 'SIGTERM caught, exiting'
-      server.stop =>
-        process.exit 0
+      if @server?.stop?
+        console.log 'stopping server'
+        @server.stop =>
+          process.exit 0
+        return
+      process.exit 0
 
 command = new Command()
 command.catchErrors()
