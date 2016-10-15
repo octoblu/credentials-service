@@ -1,6 +1,6 @@
 {
   "name": "credentials-service",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "Put some description here",
   "keywords": [],
   "homepage": "https://github.com/octoblu/credential",
@@ -16,7 +16,10 @@
   },
   "scripts": {
     "start": "node command.js",
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "nyc npm test",
+    "mocha:json": "env NPM_ENV=test mocha --reporter json > coverage/mocha.json",
+    "test:watch": "mocha -w -R mocha-multi --reporter-options spec=-,mocha-osx-reporter=-"
   },
   "devDependencies": {
     "@octoblu/shmock": "^0.7.2",
@@ -29,7 +32,10 @@
     "request": "^2.66.0",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
-    "uuid": "^2.0.1"
+    "uuid": "^2.0.1",
+    "nyc": "^8.3.0",
+    "mocha-osx-reporter": "^0.1.2",
+    "mocha-multi": "^0.9.1"
   },
   "dependencies": {
     "@octoblu/connect-http-signature": "^0.1.3",

@@ -1,18 +1,21 @@
 language: node_js
 node_js:
-- '5'
+  - '5'
+branches:
+  only:
+  - '/^v[0-9]/'
 addons:
   code_climate:
-    repo_token: "10d06bef799334b759683a2fa91ff4162cc0029e86da2300e3d94a54fd6ba11e"
+    repo_token: 10d06bef799334b759683a2fa91ff4162cc0029e86da2300e3d94a54fd6ba11e
 before_script:
-- npm install -g codeclimate-test-reporter
+  - npm install -g codeclimate-test-reporter
 after_script:
-- codeclimate-test-reporter < coverage/lcov.info
-deploy:
-  provider: npm
-  email: serveradmin@octoblu.com
-  api_key:
-    secure: bNxVwMFJnAI7NShXT9cB6fs4KE6NXBmwPIi5xmp1S3KRTf4msTMJ8pOi4LaV6e921wmYHs3r2JZ4cALJArRLphCd2CSJqXbmWJQmrzBW6UydeaNkxw2UJhRhTd6XwM7Vy5heIU+xwFGyYUnqjMjVw1F62zrH6IfLwzws1ivR5Wf9YCPMbtA2jHVgsXoUDl4jkbB99GRBkwIa0TWfBs9fsrLXEUO5hsQ6k1/xTxa/r6yB/sFxV/+ZtR/RFcxP6vRlRg9TqWATmcVSz09xdfpa5IhDgEaykP7XQ6r5mlfltPZ48CJTSAwfiZLiEcfMGONQqDNPKxa2es8nPSo7ue5C7c0vyUY4n3rsIoFhtmEnlCe3Ezz7ERBalOXrVkK0ITH9nWW/yDI/QF7/aSFrJs/oYYN+FGdNio25MzrSSFWlPWJcXsXTuDFkWCEbg4JcYLYv6fWOL4BbPeOaGnmkrH82SfTj++XmJW7w+E7g49sGK370deT/ItskAnmHwuo7CvpYQHOUdCVJuiTVMiW1N2pX8nrE2AtBPqG+uQr6kewvU8FtQJ1PNlWHR94s7RM5R0cvu/+Aj8CsoWiGSfVJofnE6+aLSMwrn+MKcBFaEx8AN7J6daq/CTlhwlE0PR/pEFoeC9xSVX8fXAuMrtEUEWhf0nGnRGrUpXwgKxewJ5ins4k=
-  on:
-    tags: true
-    branches: true
+  - codeclimate-test-reporter < coverage/lcov.info
+notifications:
+  webhooks:
+    - 'https://beekeeper.octoblu.com/webhooks/travis:ci'
+after_success:
+  - npm run coverage
+  - 'npm run mocha:json'
+  - 'bash <(curl -s https://codecov.io/bash)'
+  - 'bash <(curl -s https://codecov.octoblu.com/bash)'
